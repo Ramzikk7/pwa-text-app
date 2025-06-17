@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PWA Notification</title>
+  <link rel="manifest" href="manifest.json">
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').then(() => {
+        console.log('Service Worker Registered');
+      });
+    }
+
+    function showNotification() {
+      if (Notification.permission === 'granted') {
+        navigator.serviceWorker.getRegistration().then(function(reg) {
+          reg.showNotification("Уведомление", {
+            body: "Это пример PWA уведомления.",
+            icon: "icons/icon-192.png"
+          });
+        });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      if (Notification.permission !== 'granted') {
+        Notification.requestPermission().then(permission => {
+          if (permission === 'granted') {
+            showNotification();
+          }
+        });
+      } else {
+        showNotification();
+      }
+    });
+  </script>
+</head>
+<body>
+  <h1>PWA Уведомление</h1>
+</body>
+</html>
